@@ -1,0 +1,40 @@
+application:
+  subdomain: plantuml
+  multi_instance: false
+  # PlantUML Server is stateless: it renders a diagram from the text encoded in
+  # the URL and keeps nothing between requests, so there is no data volume and
+  # no account to seed. The platform entry login is the only gate.
+  upstreams:
+    - location: /package-licenses/
+      backend: file:///lzcapp/pkg/content/licenses/
+    - location: /
+      backend: http://plantuml:8080/
+
+services:
+  plantuml:
+    # upstream: plantuml/plantuml-server:v1.2026.9
+    image: docker.1ms.run/plantuml/plantuml-server:v1.2026.9
+    environment:
+      # Diagrams are encoded into the URL; keep generated images from being
+      # cached by intermediaries longer than needed.
+      - PLANTUML_SECURITY_PROFILE=SANDBOX
+      - TZ=Asia/Shanghai
+
+usage: |
+  PlantUML Server 用纯文本画图：写几行描述就能生成时序图、类图、用例图、甘特图等，输出 PNG 或 SVG。
+
+  使用方法：
+  1. 打开应用，在编辑框里输入 PlantUML 语法（例如 @startuml ... @enduml），右侧会实时预览。
+  2. 也可以在任意支持 PlantUML 的编辑器里写好，用 URL 编码方式请求本服务生成图片。
+  3. 画好后右键保存图片，或复制链接分享。
+
+  数据与安全：
+  - 本服务是无状态渲染器：图形内容编码在请求里，服务器不保存任何图稿，也没有数据库。
+  - 因此没有「历史记录」功能，重要的图请自行保存文本或导出图片。
+  - 安全配置使用 SANDBOX 模式，限制图表中可能的外部调用。
+  - 应用经懒猫入口鉴权访问。
+
+  说明：
+  - 无账号体系是它的设计：渲染本身不需要身份，访问控制由懒猫入口负责。
+  - 复杂图表首次渲染可能稍慢，属正常现象。
+  - 未做真机验证：语法渲染、中文标签、导出与 SANDBOX 限制行为均未在设备上实测。

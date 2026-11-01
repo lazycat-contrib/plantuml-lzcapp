@@ -1,0 +1,18 @@
+package: community.lazycat.app.plantuml
+version: 1.2026.9
+name: PlantUML Server
+description: "Render UML and other diagrams from plain text descriptions."
+min_os_version: "1.5.0"
+homepage: https://github.com/plantuml/plantuml-server
+author: plantuml
+license: GPL-3.0
+permissions:
+  required:
+    - net.internet
+locales:
+  zh:
+    name: PlantUML Server
+    description: "用纯文本描述绘制 UML 时序图、类图、甘特图等，输出 PNG/SVG。"
+  en:
+    name: PlantUML Server
+    description: "Render UML and other diagrams from plain text descriptions."
